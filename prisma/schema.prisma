@@ -29,9 +29,10 @@ type OrderItemsCategory {
 }
 
 model Category {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  slug String
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  slug    String
+  Product Product[]
 }
 
 model Order {
@@ -47,15 +48,20 @@ model Order {
 
 model Product {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  categoryId  String   @db.ObjectId
-  createdAt   DateTime @db.Date
-  description String
-  images      String[]
   name        String
+  description String
   price       Float
   rating      Float
   slug        String
   stock       BigInt
+  images      String[]
+  createdAt   DateTime @db.Date
+
+  // 1. أضف حقل العلاقة هنا
+  category Category @relation(fields: [categoryId], references: [id])
+
+  // 2. تأكد أن الحقل المستخدم كـ Foreign Key يحمل نوع @db.ObjectId
+  categoryId String @db.ObjectId
 }
 
 model User {
