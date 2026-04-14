@@ -1,6 +1,6 @@
 import "./globals.css";
 import ThemeRegistry from "@/components/layout/ThemeRegistry";
-
+import Script from "next/script";
 export const metadata = {
   title: "Mobile E-Commerce",
   description:
@@ -12,7 +12,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ThemeRegistry>{children}</ThemeRegistry>
+<Script src="https://upload-widget.cloudinary.com/global/all.js" strategy="beforeInteractive" />
       </body>
     </html>
   );
 }
+
+// أضف هذا داخل الـ return في الأسفل

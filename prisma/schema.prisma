@@ -7,108 +7,64 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id            String    @id @map("_id") @default(auto()) @db.ObjectId
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  password      String?
-  image         String?
-  role          String    @default("USER")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  cart          Cart?
-  orders        Order[]
-  reviews       Review[]
-  accounts      Account[]
-  sessions      Session[]
-  isBlocked     Boolean   @default(false)
+type OrderItems {
+  category    OrderItemsCategory
+  categoryId  String
+  createdAt   String
+  description String
+  id          String
+  images      String[]
+  name        String
+  price       Float
+  quantity    Int
+  rating      Float
+  slug        String
+  stock       Int
 }
 
-model Product {
-  id          String    @id @map("_id") @default(auto()) @db.ObjectId
-  name        String
-  slug        String    @unique
-  description String
-  price       Float
-  images      String[]
-  category    Category? @relation(fields: [categoryId], references: [id])
-  categoryId  String?   @db.ObjectId
-  stock       Int       @default(40)
-  rating      Float     @default(4.5)
-  createdAt   DateTime  @default(now())
-  reviews     Review[]
+type OrderItemsCategory {
+  id   String
+  name String
+  slug String
 }
 
 model Category {
-  id       String    @id @map("_id") @default(auto()) @db.ObjectId
-  name     String
-  slug     String    @unique
-  products Product[]
-}
-
-model Cart {
-  id        String   @id @map("_id") @default(auto()) @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @unique @db.ObjectId
-  items     Json
-  updatedAt DateTime @updatedAt
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  slug String
 }
 
 model Order {
-  id            String   @id @map("_id") @default(auto()) @db.ObjectId
-  user          User     @relation(fields: [userId], references: [id])
-  userId        String   @db.ObjectId
-  items         Json
-  totalAmount   Float
-  status        String   @default("PENDING")
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   address       String
-  paymentMethod String   @default("CARD")
-  createdAt     DateTime @default(now())
+  createdAt     DateTime     @db.Date
+  items         OrderItems[]
+  paymentMethod String
+  status        String
+  totalAmount   Float
+  userId        String       @db.ObjectId
 }
 
-model Review {
-  id        String   @id @map("_id") @default(auto()) @db.ObjectId
-  product   Product  @relation(fields: [productId], references: [id])
-  productId String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @db.ObjectId
-  rating    Int
-  comment   String
-  createdAt DateTime @default(now())
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  categoryId  String   @db.ObjectId
+  createdAt   DateTime @db.Date
+  description String
+  images      String[]
+  name        String
+  price       Float
+  rating      Float
+  slug        String
+  stock       BigInt
 }
 
-model Account {
-  id                 String  @id @map("_id") @default(auto()) @db.ObjectId
-  userId             String  @db.ObjectId
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
-  oauth_token_secret String?
-  oauth_token        String?
-  user               User    @relation(fields: [userId], references: [id])
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @map("_id") @default(auto()) @db.ObjectId
-  sessionToken String   @unique
-  userId       String   @db.ObjectId
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id])
-}
-
-model VerificationToken {
-   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier String
-  token      String   @unique
-  expires    DateTime
-  @@unique([identifier, token])
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @db.Date
+  email     String
+  image     String?
+  name      String
+  password  String
+  role      String
+  updatedAt DateTime @db.Date
 }

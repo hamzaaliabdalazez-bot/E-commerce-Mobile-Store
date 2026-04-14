@@ -4,13 +4,16 @@ import Box from "@mui/material/Box";
 import prisma from "@/lib/prisma";
 import ProductDetailsClient from "@/components/ProductDetailsClient";
 
-export const revalidate = 10;
+export const revalidate = 0;
 
 async function getProduct(productId) {
-  return prisma.product.findUnique({
+  const productData = prisma.product.findUnique({
     where: { id: productId },
     include: { category: true },
   });
+
+
+  return productData; p
 }
 
 export default async function ProductDetails({ params }) {
