@@ -48,3 +48,35 @@ export async function DELETE(req, { params }) {
     );
   }
 }
+
+
+export async function PUT(request, { params }) {
+  try {
+    const { id } = params;
+    const body = await request.json();
+    const { price, images } = body;
+
+    // تحديث المنتج في قاعدة البيانات
+    const updatedProduct = await prisma.product.update({
+      where: { id: id },
+      data: {
+        price: price,
+        images: images,
+      },
+    });
+
+    return NextResponse.json(updatedProduct, { status: 200 });
+  } catch (error) {
+    console.error("Update Error:", error);
+
+    // معالجة خطأ إذا كان المنتج غير موجود
+    if (error.code === "P2025") {
+      return NextResponse.json({ error: "المنتج غير موجود" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { error: "فشل في تحديث البيانات" },
+      { status: 500 },
+    );
+  }
+}
