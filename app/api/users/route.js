@@ -43,6 +43,8 @@ export async function POST(request) {
       email: body.email,
       password: hashedPassword,
       role: "USER",
+      createdAt: new Date(), // إرسال التاريخ الحالي يدوياً
+      updatedAt: new Date(), // إرسال التاريخ الحالي يدوياً
     },
   });
   return NextResponse.json({ id: user.id, email: user.email }, { status: 201 });
