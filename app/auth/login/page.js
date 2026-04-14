@@ -30,6 +30,7 @@ export default function LoginPage() {
     });
     if (res.error) {
       setError(res.error);
+      console.log("Login error:", res.error);
     } else {
       router.push("/");
     }
@@ -60,7 +61,11 @@ export default function LoginPage() {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             fullWidth
           />
-          {error && <Typography color="error">{error}</Typography>}
+          {error && (
+            <Typography color="error">
+              email or password is incorrect
+            </Typography>
+          )}
           <Button type="submit" variant="contained" size="large">
             Sign in
           </Button>

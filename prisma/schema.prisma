@@ -67,7 +67,7 @@ model Product {
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @db.Date
-  email     String
+  email     String   @unique
   image     String?
   name      String
   password  String
