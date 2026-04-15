@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { ThemeModeContext } from "@/context/ThemeModeContext";
+import { ThemeModeContext } from "@/context/ThemeContext";
 import ProductCard from "@/components/ProductCard";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
