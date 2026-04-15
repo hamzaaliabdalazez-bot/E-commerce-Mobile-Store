@@ -1,14 +1,17 @@
-import React from 'react'
+"use client";
+import React from "react";
 import { useContext } from "react";
-import { ThemeModeContext } from "@/context/ThemeContext";;
+import { ThemeModeContext } from "@/context/ThemeContext";
 import ProductCard from "@/components/ProductCard";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 const Covers = ({ products }) => {
-    const {language} = useContext(ThemeModeContext);
+  const { language } = useContext(ThemeModeContext);
   return (
-    <>      <Typography variant="h4" gutterBottom>
+    <>
+      {" "}
+      <Typography variant="h4" gutterBottom>
         {language === "en" ? "Covers" : "أغطية"}
       </Typography>
       <Typography color="text.secondary" sx={{ mb: 3 }}>
@@ -22,8 +25,9 @@ const Covers = ({ products }) => {
             <ProductCard product={product} />
           </Grid>
         ))}
-      </Grid></>
-  )
-}
+      </Grid>
+    </>
+  );
+};
 
-export default Covers
+export default Covers;

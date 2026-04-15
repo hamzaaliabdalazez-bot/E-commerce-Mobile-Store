@@ -66,11 +66,21 @@ const Homepage = ({ featured }) => {
             {language === "EN" ? "Featured Products" : "منتجات مميزة"}
           </Typography>
           <Grid container spacing={2}>
-            {featured.map((product) => (
-              <Grid item xs={12} sm={6} md={4} key={product.id}>
-                <ProductCard product={product} />
+            {featured?.length > 0 ? (
+              featured.map((product) => (
+                <Grid item xs={12} sm={6} md={4} key={product.id}>
+                  <ProductCard product={product} />
+                </Grid>
+              ))
+            ) : (
+              <Grid item xs={12}>
+                <Typography color="text.secondary">
+                  {language === "EN"
+                    ? "No featured products available."
+                    : "لا توجد منتجات مميزة متاحة."}
+                </Typography>
               </Grid>
-            ))}
+            )}
           </Grid>
         </Box>
 
