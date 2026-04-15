@@ -29,11 +29,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 
 import { ThemeModeContext } from "@/context/ThemeContext";
 
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Products", href: "/products" },
-  { label: "Cart", href: "/cart" },
-];
+
 
 const CartBadge = styled(Badge)`
   & .${badgeClasses.badge} {
@@ -43,12 +39,39 @@ const CartBadge = styled(Badge)`
 `;
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const { data: session } = useSession();
   const { mode, toggleTheme, language, toggleLanguage } =
     useContext(ThemeModeContext);
+  const navLinks = [
+    { label: language === "EN" ? "Home" : "الرئيسية", href: "/" },
+    { label: language === "EN" ? "Products" : "المنتجات", href: "/products" },
+    { label: language === "EN" ? "Cart" : "السلة", href: "/cart" },
+  ];
+  const categoriesList = [
+    {
+      label: language === "EN" ? "mobiles" : "الهواتف",
+      value: language === "EN" ? "mobiles" : "الهواتف",
+      href: "/categories/mobiles",
+    },
+    {
+      label: language === "EN" ? "covers" : "أغلفة",
+      value: language === "EN" ? "covers" : "أغلفة",
+      href: "/categories/covers",
+    },
+    {
+      label: language === "EN" ? "chargers" : "شاحنات",
+      value: language === "EN" ? "chargers" : "شاحنات",
+      href: "/categories/chargers",
+    },
+  ];
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const { data: session } = useSession();
+
   const { cart, hydrated, totalItems } = useContext(CartContext);
 
   const isMenuOpen = Boolean(anchorEl);
@@ -70,13 +93,13 @@ export default function Navbar() {
           variant="h6"
           sx={{ color: "inherit", textDecoration: "none" }}
         >
-          Mobile Store
+          {language === "EN" ? "Mobile Store" : "متجر الهواتف"}
         </Typography>
 
         {/* Right */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <Button component={Link} href="/products" color="inherit">
-            Products
+            {language === "EN" ? "Products" : "المنتجات"}
           </Button>
 
           {/* Cart */}
@@ -126,7 +149,7 @@ export default function Navbar() {
                   href="/dashboard/user"
                   onClick={handleMenuClose}
                 >
-                  My Account
+                  {language === "EN" ? "My Account" : "حسابي"}
                 </MenuItem>
 
                 {session.user?.role === "ADMIN" && (
@@ -135,7 +158,7 @@ export default function Navbar() {
                     href="/dashboard/admin"
                     onClick={handleMenuClose}
                   >
-                    Admin Dashboard
+                    {language === "EN" ? "Admin Dashboard" : "لوحة تحكم الإدارة"}
                   </MenuItem>
                 )}
 
@@ -145,13 +168,13 @@ export default function Navbar() {
                     signOut({ callbackUrl: "/" });
                   }}
                 >
-                  Logout
+                  {language === "EN" ? "Logout" : "تسجيل الخروج"}
                 </MenuItem>
               </Menu>
             </>
           ) : (
             <Button component={Link} href="/auth/login" color="inherit">
-              Login
+              {language === "EN" ? "Login" : "تسجيل الدخول"}
             </Button>
           )}
         </div>
@@ -173,21 +196,19 @@ export default function Navbar() {
             </ListItem>
           ))}
 
-          {["mobiles", "covers", "chargers"].map((category) => (
+          {categoriesList.map((category) => (
             <ListItem key={category} disablePadding>
               <ListItemButton
                 component={Link}
-                href={`/categories/${category}`}
+                href={category.href}
                 onClick={() => setOpen(false)}
               >
-                <ListItemText
-                  primary={category.charAt(0).toUpperCase() + category.slice(1)}
-                />
+                <ListItemText primary={category.label} />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
       </Drawer>
-    </AppBar> 
+    </AppBar>
   );
 }

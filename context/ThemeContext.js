@@ -11,38 +11,51 @@ export const ThemeModeContext = createContext({
 });
 
 const THemeModeProvider = ({ children }) => {
-  const [mode, setMode] = useState("light");
-  const [language, setLanguage] = useState("EN");
+  // 1. نقرأ من localStorage مباشرة عند تعريف الـ State
+  const [mode, setMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("themeMode") || "light";
+    }
+    return "light";
+  });
+
+  const [language, setLanguage] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("language") || "EN";
+    }
+    return "EN";
+  });
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    // نقرأ من الـ storage فقط بعد أول رندر على المتصفح
+    const storedMode = localStorage.getItem("themeMode") || "light";
+    const storedLang = localStorage.getItem("language") || "EN";
+    setMode(storedMode);
+    setLanguage(storedLang);
+    setMounted(true); // الآن نحن على المتصفح وجاهزون
+  }, []);
 
   const toggleTheme = () => {
-    setMode((prev) => (prev === "light" ? "dark" : "light"));
+    const newMode = mode === "light" ? "dark" : "light";
+    setMode(newMode);
+    localStorage.setItem("themeMode", newMode);
   };
 
   const toggleLanguage = () => {
-    setLanguage((prev) => (prev === "EN" ? "AR" : "EN"));
+    const newLang = language === "EN" ? "AR" : "EN";
+    setLanguage(newLang);
+    localStorage.setItem("language", newLang);
   };
 
   const value = useMemo(
     () => ({ mode, toggleTheme, language, toggleLanguage }),
     [mode, language],
   );
-  // const [mode, setMode] = useState("light");
-  // const [language, setLanguage] = useState("EN");
 
+  // 2. نحتفظ فقط بـ useEffect الخاص بالحفظ
   useEffect(() => {
-    const storedMode =
-      typeof window !== "undefined" ? localStorage.getItem("themeMode") : null;
-    const storedLanguage =
-      typeof window !== "undefined" ? localStorage.getItem("language") : null;
-    if (storedMode) setMode(storedMode);
-    if (storedLanguage) setLanguage(storedLanguage);
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("themeMode", mode);
-      localStorage.setItem("language", language);
-    }
+    localStorage.setItem("themeMode", mode);
+    localStorage.setItem("language", language);
   }, [mode, language]);
 
   const theme = useMemo(
@@ -59,6 +72,9 @@ const THemeModeProvider = ({ children }) => {
       }),
     [mode],
   );
+  if (!mounted) {
+  return <div style={{ visibility: "hidden" }}>{children}</div>;
+}
   return (
     <ThemeProvider theme={theme}>
       <ThemeModeContext.Provider value={value}>
@@ -66,6 +82,6 @@ const THemeModeProvider = ({ children }) => {
       </ThemeModeContext.Provider>
     </ThemeProvider>
   );
-};
+};;;;
 
 export default THemeModeProvider;

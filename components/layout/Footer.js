@@ -1,7 +1,12 @@
+"use client";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import { ThemeModeContext } from "@/context/ThemeContext";
+
+import { useContext } from "react";
 
 export default function Footer() {
+  const { language } = useContext(ThemeModeContext);
   return (
     <footer>
       <Container
@@ -18,8 +23,14 @@ export default function Footer() {
         }}
       >
         <Typography variant="body2" color="text.secondary">
-          © {new Date().getFullYear()} Mobile Store. Built with Next.js and
-          Material UI.
+          {language === "EN"
+            ? "© 2024 Mobile Store. All rights reserved."
+            : "© 2024 متجر الهواتف. جميع الحقوق محفوظة."}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {language === "EN"
+            ? "Built with Next.js, Prisma, and Material-UI."
+            : "تم بناؤه باستخدام Next.js و Prisma و Material-UI."}
         </Typography>
       </Container>
     </footer>

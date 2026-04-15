@@ -2,6 +2,7 @@
 
 import { useContext, useState } from "react";
 import { CartContext } from "@/context/CartContext";
+import { ThemeModeContext } from "@/context/ThemeContext";
 import Link from "next/link";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
@@ -12,8 +13,10 @@ import Button from "@mui/material/Button";
 import Rating from "@mui/material/Rating";
 import Snackbar from "@mui/material/Snackbar";
 
+
 export default function ProductCard({ product }) {
   const { addToCart } = useContext(CartContext);
+  const {language} = useContext(ThemeModeContext);
   const [open, setOpen] = useState(false);
 
   const handleAdd = () => {
@@ -52,11 +55,11 @@ export default function ProductCard({ product }) {
       </CardContent>
       <CardActions sx={{ justifyContent: "space-between" }}>
         <Button variant="contained" size="large" onClick={handleAdd}>
-          Add to cart
+        {language === "EN" ? "Add To Cart" : "اضف للسله"}
         </Button>
 
         <Button component={Link} href={`/product/${product.id}`} size="small">
-          Details
+        {language === "EN" ? "View Details" : "عرض التفاصيل"}
         </Button>
       </CardActions>
       <Snackbar

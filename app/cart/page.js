@@ -2,6 +2,7 @@
 
 import { useContext } from "react";
 import { CartContext } from "@/context/CartContext";
+import { ThemeModeContext } from "@/context/ThemeContext";
 import ContainerLayout from "@/components/layout/ContainerLayout";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -16,13 +17,13 @@ import Link from "next/link";
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, total } =
     useContext(CartContext);
-
+const { language } = useContext(ThemeModeContext);
   const router = useRouter();
 
   return (
     <ContainerLayout>
       <Typography variant="h4" gutterBottom>
-        Shopping Cart
+        {language === "EN" ? "Your Shopping Cart" : "سلة التسوق الخاصة بك"}
       </Typography>
       <Box
         sx={{
@@ -36,10 +37,14 @@ export default function CartPage() {
       >
         {cart.length === 0 ? (
           <Typography color="text.secondary">
-            Your cart is empty. Browse products to{" "}
+            {language === "EN"
+              ? "Your cart is empty. Browse products to"
+              : "سلة التسوق فارغة. تصفح المنتجات ل"}{" "}
             <Link href="/products">
               <span className="font-bold text-blue-600 hover:underline hover:text-blue-400">
-                start shopping
+                {language === "EN"
+                  ? "start shopping"
+                  : "إضافة عناصر إلى سلة التسوق الخاصة بك."}
               </span>
             </Link>
             .
@@ -110,17 +115,17 @@ export default function CartPage() {
                 }}
               >
                 <Typography variant="h6" gutterBottom>
-                  Order Summary
+                  {language === "EN" ? "Order Summary" : "ملخص الطلب"}
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 2 }}>
-                  Total: <strong>${total.toFixed(2)}</strong>
+                  {language === "EN" ? "Total" : "الإجمالي"}: <strong>${total.toFixed(2)}</strong>
                 </Typography>
                 <Button
                   variant="contained"
                   fullWidth
                   onClick={() => router.push("/checkout")}
                 >
-                  Proceed to Checkout
+                 {language === "EN" ? "Proceed to Checkout" : "المتابعة إلى الدفع"}
                 </Button>
               </Box>
             </Grid>
